@@ -1,2 +1,2 @@
 # KursovayaVUZ
-+ Видеоотчет: https://disk.yandex.ru/i/fvFIVLZlWM1F5A
++ Video: https://disk.yandex.ru/i/fvFIVLZlWM1F5A
