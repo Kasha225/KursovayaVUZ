@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/reviews-styles.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="header">
+    <div class="header_container">
+        <div class="logo_container">
+            <img class="header_logo" src="/images/logo.png" alt="logo">
+            <p class="header_text">CS2</p>
+        </div>
+        <div class="log_out">
+            <img class="header_logo" src="/images/foto.png" alt="avatar">
+            <form action="/logout" method="post" style="display: inline;">
+                <button type="submit" class="log_out_button">
+                    <p class="log_out_text">Log out</p>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="line"></div>
+<div class="wrapper">
+    <div class="content">
+        <div class="buttons_container">
+            <a href="/reviews">
+                <img src="/images/home.png" alt="home" />
+            </a>
+            <a href="/myreviews">
+                <img src="/images/review.png" alt="review" />
+            </a>
+        </div>
+        <div class="main_content">
+            <div class="content_container">
+                <div class="review_block">
+                    <script src="/js/rating.js"></script>
+                    <form action="/reviews" method="POST">
+                        <div class="tags-container">
+                            <input
+                                    type="text"
+                                    id="tags-input"
+                                    name="selectedTag"
+                                    placeholder="Choose tag"
+                                    autocomplete="off"
+                                    readonly
+                            />
+                            <div class="tags-dropdown hidden" id="tags-dropdown">
+                                <script src="/js/tags.js"></script>
+                            </div>
+                        </div>
+                        <textarea
+                                class="review_input"
+                                name="content"
+                                placeholder="Enter your review here..."
+                                required
+                        ></textarea>
+
+
+                        <div class="stars">
+                            <input type="hidden" name="rating" id="ratingInput" value="1" />
+                            <button class="star" type="button" data-value="1">
+                                <img src="/images/star-empty.png" alt="Star 1" />
+                            </button>
+                            <button class="star" type="button" data-value="2">
+                                <img src="/images/star-empty.png" alt="Star 2" />
+                            </button>
+                            <button class="star" type="button" data-value="3">
+                                <img src="/images/star-empty.png" alt="Star 3" />
+                            </button>
+                            <button class="star" type="button" data-value="4">
+                                <img src="/images/star-empty.png" alt="Star 4" />
+                            </button>
+                            <button class="star" type="button" data-value="5">
+                                <img src="/images/star-empty.png" alt="Star 5" />
+                            </button>
+                            <button class="btn_send" type="submit">Send</button>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            <div class="card_container">
+                <div class="card" th:each="review : ${topReviews}">
+                    <div class="top_block">
+                        <img src="/images/review_ava.png" alt="review_ava" />
+                        <p th:text="${review.content}">Review content</p>
+                    </div>
+                    <div class="bot_block">
+                        <div class="stars_1">
+                <span th:each="star : ${#numbers.sequence(1, 5)}">
+                    <img th:src="${star <= review.rating ? '/images/star-filled.png' : '/images/star-empty.png'}" alt="star" />
+                </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="reviews-container" class="reviews_container">
+                <script src="/js/reaction.js"></script>
+                <div class="review-card" th:each="review : ${paginatedReviews}" th:attr="data-review-id=${review.id}">
+                    <div class="avatar">
+                        <img src="/images/review_ava.png" alt="User Avatar">
+                    </div>
+                    <div class="review-content">
+                        <span th:text="${review.user.nickname}">User Nickname</span>
+                        <span class="tags" th:if="${!#lists.isEmpty(review.tags)}">
+                             #<span th:each="tag : ${review.tags}" th:text="${tag.name}">Tag Name</span>
+                        </span><br>
+                        <p th:text="${review.content}">Review content</p>
+
+                        <div class="stars_n">
+                <span th:each="star : ${#numbers.sequence(1, 5)}">
+                    <img th:src="${star <= review.rating ? '/images/star-filled.png' : '/images/star-empty.png'}" alt="star" />
+                </span>
+                        </div>
+                    </div>
+                    <div class="review-actions">
+                        <button class="like-button" type="button">
+                            <img src="/images/like-icon.png" alt="Like">
+                        </button>
+                        <button class="dislike-button" type="button">
+                            <img src="/images/dislike-icon.png" alt="Dislike">
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pagination">
+                <a th:if="${currentPage > 0}"
+                   th:href="@{'/reviews?page=' + (${currentPage - 1}) + '#reviews-container'}"
+                   class="prev-page">Previous</a>
+
+                <span>Page <span th:text="${currentPage + 1}"></span> of <span th:text="${totalPages}"></span></span>
+
+                <a th:if="${currentPage < totalPages - 1}"
+                   th:href="@{'/reviews?page=' + (${currentPage + 1}) + '#reviews-container'}"
+                   class="next-page">Next</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
